@@ -1,13 +1,20 @@
 const express = require('express');
+const bodyParser = require('body-parser');
+
 const app = express();
-const PORT = 8080;
-const HOST = '0.0.0.0';
+const config = require('./server/config/config');
 
 const customersRoute = require('./server/routes/customers.route');
 const router = express.Router();
+const cors = require('cors');
+
+require('./server/config/mongoose');
 
 router.use('/api/customers', customersRoute);
 
+app.use(cors());
+app.use(bodyParser.json())
 app.use(router);
-app.listen(PORT, HOST);
-console.log(`Running on HOST ${HOST} and PORT ${PORT}`);
+
+app.listen(config.port, config.host);
+console.log(`Running on HOST ${config.host} and PORT ${config.port}`);

@@ -1,16 +1,26 @@
+const Customer = require('../models/customer.model');
 
-const getCustomers = (telephoneNumber) => {
-    return {
-        customerName: 'Chris Tran',
-        telephoneNumber: '0405909588'
-    }
+const getCustomers = async (telephoneNumber) => {
+    const regexp = new RegExp(`^${telephoneNumber}`);
+    const customers = await Customer.find({'telephone': regexp});
+    
+    return customers;
 };
 
-const postCustomer = (customerName, telephoneNumber) => {
-    return {
-        customerName: 'Chris Tran',
-        telephoneNumber: '0405909588'
+const postCustomer = async (customerName, telephoneNumber) => {
+    let customer = new Customer({ 
+        name: customerName,
+        telephone: telephoneNumber
+    });
+    
+    try {
+        customer = await customer.save();
+    } catch (exception) {
+        customer = null;
     }
+
+    console.log('service postCustomer');
+    return customer;
 };
 
 module.exports = {

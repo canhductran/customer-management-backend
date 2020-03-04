@@ -1,15 +1,22 @@
 const customersService = require('../services/customers.service');
 
-const getCustomers = function(req, res) {
-    const telephoneNumber = req.params.telephoneNumber;
-    res.send(customersService.getCustomers(telephoneNumber));
+const getCustomers = async function(req, res) {
+    const telephoneNumber = req.query.customerTelephoneNumber;
+
+    let customers = await customersService.getCustomers(telephoneNumber);
+    
+    res.send(customers);
 };
 
-const postCustomer = function(req, res) {
+const postCustomer = async function(req, res) {
     const customerName = req.body.customerName;
-    const telephoneNumber = req.body.telephoneNumber;
+    const customerTelephoneNumber = req.body.customerTelephoneNumber;
 
-    res.send(customersService.postCustomer(customerName, telephoneNumber));
+    let customer = await customersService.postCustomer(customerName, customerTelephoneNumber);
+    
+    console.log('controller postCustomer');
+    console.log(customer);
+    res.send(customer);
 };
 
 module.exports = {
